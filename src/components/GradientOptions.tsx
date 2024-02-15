@@ -4,6 +4,7 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { useStore } from "../store/store";
 
 const GradientOptions = () => {
+  const orientation = useStore((state) => state.orientation);
   const setOrientation = useStore((state) => state.setOrientation);
   const setGradientPosition = useStore((state) => state.setGradientPosition);
   return (
@@ -15,12 +16,11 @@ const GradientOptions = () => {
         name="orientation"
         id="orientation"
         onChange={(e) => setOrientation(e.currentTarget.value)}
+        value={orientation} // Set the default value here
         className="w-full p-2 border border-slate-900 rounded-md"
       >
         <option value="to right">Right</option>
-        <option value="to left" selected>
-          Left
-        </option>
+        <option value="to left">Left</option>
         <option value="to top">Top</option>
         <option value="to bottom">Bottom</option>
       </select>
