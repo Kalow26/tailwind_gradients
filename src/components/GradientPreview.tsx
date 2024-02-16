@@ -1,12 +1,13 @@
 "use client";
 
+import { copyToClipboard } from "@/utils/copyToClipBoard";
 import { useRef, useState } from "react";
 import { useStore } from "../store/store";
 import { Button } from "./ui/button";
 
 const GradientPreview = () => {
   const [copied, setCopied] = useState(false);
-  const tailwindClassNameRef = useRef(null);
+  const tailwindClassNameRef = useRef<HTMLParagraphElement | null>(null);
   const orientation = useStore((state) => state.orientation);
   const startColor = useStore((state) => state.startColor);
   const endColor = useStore((state) => state.endColor);
@@ -24,25 +25,6 @@ const GradientPreview = () => {
     3
   )} from-${tailwindStartColorName}-${tailwindStartRefColor} to-${tailwindEndColorName}-${tailwindEndRefColor}`;
 
-  const copyToClipboard = () => {
-    if (tailwindClassNameRef.current) {
-      const textToCopy =
-        (tailwindClassNameRef.current as HTMLElement)?.textContent ?? "";
-
-      navigator.clipboard
-        .writeText(textToCopy)
-        .then(() => {
-          setCopied(true);
-          setTimeout(() => setCopied(false), 1000);
-        })
-        .catch((error) => {
-          console.error(
-            "Erreur lors de la copie dans le presse-papiers : ",
-            error
-          );
-        });
-    }
-  };
   return (
     <>
       <div
@@ -58,7 +40,9 @@ const GradientPreview = () => {
       >
         {tailwindClassName}
       </p>
-      <Button onClick={copyToClipboard}>
+      <Button
+        onClick={() => copyToClipboard({ tailwindClassNameRef, setCopied })}
+      >
         {copied ? "Copied!" : "Copy to Clipboard"}
       </Button>
     </>
